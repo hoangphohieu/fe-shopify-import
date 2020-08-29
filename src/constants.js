@@ -1,0 +1,1 @@
+export const NodeURL = "http://localhost:7000/parent";
