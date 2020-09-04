@@ -109,6 +109,7 @@ function Home(props) {
                 item["Variant Inventory Qty"] = itemProduct.VariantInventoryQty;
                 item["Variant Price"] = itemProduct.VariantPrice;
                 item["Variant SKU"] = itemProduct.VariantSKU;
+                item["Gift Card"] = "FALSE";
                 items.push(item);
                 itemsSau = _.difference(dataChild.data, itemFirst);
             }
@@ -147,7 +148,7 @@ function Home(props) {
                 "Image Src": "",
                 "Image Position": "",
                 "Image Alt Text": "",
-                "Gift Card": "FALSE",
+                "Gift Card": "",
                 "SEO Title": "",
                 "SEO Description": "",
                 "Google Shopping / Google Product Category": "",
@@ -175,16 +176,27 @@ function Home(props) {
             mockData["Variant Image"] = imgDrive.url.split("&")[0];
             let variant = product.listVariant.filter(item => item.NameDrive === mockData["Image Position"])[0];
             try {
-                mockData["Option1 Value"] = variant.Option1Value;
-                mockData["Option2 Value"] = variant.Option2Value;
-                mockData["Option3 Value"] = variant.Option3Value;
-                mockData["Variant Compare At Price"] = variant.VariantCompareAtPrice;
-                mockData["Variant Inventory Qty"] = variant.VariantInventoryQty;
-                mockData["Variant Price"] = variant.VariantPrice;
-                mockData["Variant SKU"] = variant.VariantSKU;
-                items.push(mockData);
+                // console.log(variant.Option1Value);
+                if (variant.Option1Value !== "") {
+                    mockData["Option1 Value"] = variant.Option1Value;
+                    mockData["Option2 Value"] = variant.Option2Value;
+                    mockData["Option3 Value"] = variant.Option3Value;
+                    mockData["Variant Compare At Price"] = variant.VariantCompareAtPrice;
+                    mockData["Variant Inventory Qty"] = variant.VariantInventoryQty;
+                    mockData["Variant Price"] = variant.VariantPrice;
+                    mockData["Variant SKU"] = variant.VariantSKU;
+                    items.push(mockData);
+                }
+                else {
+                    mockData["Variant Image"] = "";
+                    mockData["Variant Inventory Policy"] = "";
+                    mockData["Variant Fulfillment Service"] = "";
+                    mockData["Variant Requires Shipping"] = "";
+                    mockData["Variant Taxable"] = "";
+                    items.push(mockData);
+                }
             } catch (error) {
-                alert(`thừa "${mockData["Image Position"]}" trong drive "${dataChild.name}" `);
+                // alert(`thừa "${mockData["Image Position"]}" trong drive "${dataChild.name}" `);
             }
 
         }
@@ -358,7 +370,7 @@ function Home(props) {
                     {product.map((item, key) => <div className={"col-3 namepro" + ((SelectProduct === item.productName) ? " select-pro" : "")} key={key} onClick={() => setSelectProduct(item.productName)}>
                         {item.productName}
                         <div onClick={() => changeItemProduct(item.productName)} className="more-info">
-                           v
+                            v
                         </div>
                     </div>)}
                     <div className="col-3" onClick={addProduct} >Add Product</div>
@@ -370,10 +382,10 @@ function Home(props) {
                 <div className="get-link">
                     <input type="text" placeholder="link" onChange={(e) => setLinkParent(e.target.value)} ></input>
                     <button onClick={fetchFolderParent} className="ml-2">get</button>
-               
-                    
+
+
                 </div>
-                {(showProduct.show===true)?<button onClick={closeModalProduct} className="modal-closse">X</button>:""}
+                {(showProduct.show === true) ? <button onClick={closeModalProduct} className="modal-closse">X</button> : ""}
 
 
                 {(showProduct.show === true) ? <LocalItem mockData={showProduct.mockData} name={showProduct.name} list={showProduct.list} /> : ""}
