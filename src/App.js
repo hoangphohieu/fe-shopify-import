@@ -9,6 +9,7 @@ function App() {
     <div className="App">
       <Home />
       <LocalItem />
+      <a link="https://www.facebook.com/july.hph" className="july">July Hoang</a>
     </div>
   );
 }
