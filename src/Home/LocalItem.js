@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import _ from "lodash";
 function LocalItem(props) {
-      console.log(props);
+      // console.log(props);
 
       const [MockData, setMockData] = useState(props.mockData);
       const [MockVariant, setMockVariant] = useState({
@@ -37,7 +37,7 @@ function LocalItem(props) {
       }
       let addProduct = () => {
             let data = { ...MockData };
-            data["Handle"] = _.kebabCase(data["Title"]) + "-";
+            // data["Handle"] = _.kebabCase(data["Title"]) + "-";
             data["Option1 Name"] = MockVariant.Option1Name;
             data["Option2 Name"] = MockVariant.Option2Name;
             data["Option3 Name"] = MockVariant.Option3Name;
@@ -98,13 +98,13 @@ function LocalItem(props) {
                         />
                   </div>
 
-                  <div className="one-pro">
+                  {/* <div className="one-pro">
                         <span>Title ()</span>
                         <input type="text"
                               onChange={(e) => setMockData({ ...MockData, Title: e.target.value })}
                               value={MockData.Title}
                         />
-                  </div>
+                  </div> */}
                   <div className="one-pro">
                         <span>Body (HTML)</span>
                         <input type="text"

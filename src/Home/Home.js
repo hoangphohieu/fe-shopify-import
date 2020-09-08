@@ -72,7 +72,8 @@ function Home(props) {
                     link: folderChild[0].id
                 }
             });
-            result = result.data.map(item => { return { name: item.name, url: item.webContentLink } });
+            result = result.data.filter(item=>{return item.trashed===false}).map(item => { return { name: item.name, url: item.webContentLink } });
+            
             if (!ignore) {
                 setdataChild([...dataChild, { name: folderChild[0].name, data: result }]);
                 let folderChild2 = folderChild;
@@ -80,46 +81,54 @@ function Home(props) {
                 setfolderChild([...folderChild2]);
             };
         }
-        console.log(folderChild);
-        console.log(dataChild);
+        // console.log(folderChild);
+        // console.log(dataChild);
         if (folderChild.length > 0) fetchData();
         return () => { ignore = true; }
     }, [folderChild]);
-    console.log(showProduct);
+    // console.log(showProduct);
 
     let createChild = (dataChild, product) => {
         console.log(dataChild);
         console.log(product);
-        let items = [], itemsSau = [];
-        {// item dau tien
-            let item = { ...product.mockData };
-            let itemFirst = dataChild.data.filter(item => item.name === "1.jpg");
-            if (itemFirst.length === 1) {
-                item["Handle"] = item["Handle"] + dataChild.name.split(" ").join("-");
-                item["Image Position"] = itemFirst[0].name.split(".")[0];
-                item["Image Src"] = itemFirst[0].url.split("&")[0];
-                item["Variant Image"] = itemFirst[0].url.split("&")[0];
-                let itemProduct = product.listVariant.filter(item => item.NameDrive === itemFirst[0].name.split(".")[0])[0];
-                console.log(itemProduct);
-                item["Option1 Value"] = itemProduct.Option1Value;
-                item["Option2 Value"] = itemProduct.Option2Value;
-                item["Option3 Value"] = itemProduct.Option3Value;
-                item["Title"] = item.Title + " " + dataChild.name;
-                item["Variant Compare At Price"] = itemProduct.VariantCompareAtPrice;
-                item["Variant Inventory Qty"] = itemProduct.VariantInventoryQty;
-                item["Variant Price"] = itemProduct.VariantPrice;
-                item["Variant SKU"] = itemProduct.VariantSKU;
-                item["Gift Card"] = "FALSE";
-                items.push(item);
-                itemsSau = _.difference(dataChild.data, itemFirst);
-            }
-            else {
-                alert("phai co duy nhat 1 anh 1.jpg");
-                window.location.reload(true);
-            }
+        let items = [];
+        if (dataChild.name.split("-").length !== 2) { // neu thu muc co 2 dau - thi loi
+            alert("ten thu muc chi duoc 1 dau - ");
+            window.location.reload(true);
 
         }
-        for (let j = 0; j < itemsSau.length; j++) {
+
+        {// item dau tien
+            let item = { ...product.mockData };
+            let itemFirst = product.listVariant[0];
+            item["Handle"] = dataChild.name.split(" ").join("-");
+            item["Title"] = dataChild.name.split("-")[0];
+            item["Variant Image"] = dataChild.data.filter(param => { return param.name.split(".")[0] === itemFirst.NameDrive })[0].url.split("&")[0];
+            let itemProduct = product.listVariant[0];
+            console.log(itemProduct);
+            item["Option1 Value"] = itemProduct.Option1Value;
+            item["Option2 Value"] = itemProduct.Option2Value;
+            item["Option3 Value"] = itemProduct.Option3Value;
+            item["Variant Compare At Price"] = itemProduct.VariantCompareAtPrice;
+            item["Variant Inventory Qty"] = itemProduct.VariantInventoryQty;
+            item["Variant Price"] = itemProduct.VariantPrice;
+            // item["Variant SKU"] = itemProduct.VariantSKU;
+            item["Gift Card"] = "FALSE";
+            item["Variant SKU"] = dataChild.name.split("-")[1];
+            if (product.mockData["Option2 Name"] !== "") {
+
+                if (itemProduct["Option1Value"].trim().toUpperCase() === "HOODIE")
+                    item["Variant SKU"] = dataChild.name.split("-")[1].trim() + "-" + "LMS" + "-" + itemProduct["Option2Value"];
+                else if (itemProduct["Option1Value"].trim().toUpperCase() === "T-SHIRT")
+                    item["Variant SKU"] = dataChild.name.split("-")[1].trim() + "-" + "TX" + "-" + itemProduct["Option2Value"];
+                else if (itemProduct["Option1Value"].trim().toUpperCase() === "SWEATER")
+                    item["Variant SKU"] = dataChild.name.split("-")[1].trim() + "-" + "WY" + "-" + itemProduct["Option2Value"];
+            }
+            items.push(item);
+
+        }
+        console.log(product.listVariant);
+        for (let j = 1; j < product.listVariant.length; j++) {
             let mockData = {
                 "Handle": "",
                 "Title": "",
@@ -169,40 +178,65 @@ function Home(props) {
                 "Variant Tax Code": "",
                 "Cost per item": ""
             }
-            let imgDrive = itemsSau[j];
-            mockData["Handle"] = product.mockData.Handle + dataChild.name.split(" ").join("-");
-            mockData["Image Position"] = imgDrive.name.split(".")[0];
-            mockData["Image Src"] = imgDrive.url.split("&")[0];
-            mockData["Variant Image"] = imgDrive.url.split("&")[0];
-            let variant = product.listVariant.filter(item => item.NameDrive === mockData["Image Position"])[0];
             try {
-                // console.log(variant.Option1Value);
-                if (variant.Option1Value !== "") {
-                    mockData["Option1 Value"] = variant.Option1Value;
-                    mockData["Option2 Value"] = variant.Option2Value;
-                    mockData["Option3 Value"] = variant.Option3Value;
-                    mockData["Variant Compare At Price"] = variant.VariantCompareAtPrice;
-                    mockData["Variant Inventory Qty"] = variant.VariantInventoryQty;
-                    mockData["Variant Price"] = variant.VariantPrice;
-                    mockData["Variant SKU"] = variant.VariantSKU;
-                    items.push(mockData);
+            mockData["Handle"] = dataChild.name.split(" ").join("-");
+            mockData["Variant Image"] = dataChild.data.filter(param => { return param.name.split(".")[0] === product.listVariant[j].NameDrive })[0].url.split("&")[0];
+            let itemProduct = product.listVariant[j];
+            if (itemProduct.Option1Value !== "") {
+                mockData["Option1 Value"] = itemProduct.Option1Value;
+                mockData["Option2 Value"] = itemProduct.Option2Value;
+                mockData["Option3 Value"] = itemProduct.Option3Value;
+                mockData["Variant Compare At Price"] = itemProduct.VariantCompareAtPrice;
+                mockData["Variant Inventory Qty"] = itemProduct.VariantInventoryQty;
+                mockData["Variant Price"] = itemProduct.VariantPrice;
+                mockData["Variant SKU"] = dataChild.name.split("-")[1];
+
+                if (product.mockData["Option2 Name"] !== "") {
+                    console.log(itemProduct["Option1Value"]);
+                    console.log(dataChild.name.split("-")[1]);
+                    if (itemProduct["Option1Value"].trim().toUpperCase() === "HOODIE")
+                        mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "LMS" + "-" + itemProduct["Option2Value"];
+                    else if (itemProduct["Option1Value"].trim().toUpperCase() === "T-SHIRT")
+                        mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "TX" + "-" + itemProduct["Option2Value"];
+                    else if (itemProduct["Option1Value"].trim().toUpperCase() === "SWEATER")
+                        mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "WY" + "-" + itemProduct["Option2Value"];
                 }
-                else {
-                    mockData["Variant Image"] = "";
-                    mockData["Variant Inventory Policy"] = "";
-                    mockData["Variant Fulfillment Service"] = "";
-                    mockData["Variant Requires Shipping"] = "";
-                    mockData["Variant Taxable"] = "";
-                    items.push(mockData);
-                }
-            } catch (error) {
-                // alert(`thừa "${mockData["Image Position"]}" trong drive "${dataChild.name}" `);
+                console.log(mockData);
+
+                items.push(mockData);
             }
+            else {
+                mockData["Variant Image"] = "";
+                mockData["Variant Inventory Policy"] = "";
+                mockData["Variant Fulfillment Service"] = "";
+                mockData["Variant Requires Shipping"] = "";
+                mockData["Variant Taxable"] = "";
+                items.push(mockData);
+            }
+
+            } catch (error) {
+                // alert("khai bao tendrive khong dung")
+            }
+
 
         }
         items.forEach(item => {
             if (item["Variant Inventory Qty"] === "") delete item["Variant Inventory Qty"]
         });
+
+        let itemsImg = dataChild.data.filter(param => { return !isNaN(param.name.split(".")[0]) });
+        itemsImg = _.sortBy(itemsImg, [function (o) { return Number(o.name.split(".")[0]) }]);
+        console.log(itemsImg);
+        itemsImg.forEach((param, key) => {
+            try { // khi khai bao  giong
+                items[key]["Image Position"] = param.name.split(".")[0];
+                items[key]["Image Src"] = param.url.split("&")[0];
+            } catch (error) {
+                // alert("sai roi ban")
+            }
+
+        })
+        // console.log(itemsImg);
         return items
     }
     useEffect(() => {
@@ -210,8 +244,10 @@ function Home(props) {
             let product = JSON.parse(localStorage.product).filter(item => item.productName === SelectProduct)[0];
             let items = []
             for (let i = 0; i < dataChild.length; i++) {
+
+
                 items = [...items, ...createChild(dataChild[i], product)]
-                console.log(items);
+                // console.log(items);
             }
             csvDownload(items);
             setdataChild([]);
@@ -234,7 +270,7 @@ function Home(props) {
 
             if (result.length === 0) alert("kiem tra lai url")
             else {
-                result = result.filter(item => item.mimeType === "application/vnd.google-apps.folder").map(item => { return { name: item.name, id: item.id } });
+                result = result.filter(item => item.mimeType === "application/vnd.google-apps.folder"&& item.trashed===false).map(item => { return { name: item.name, id: item.id } });
                 setdataChild([]);
                 setfolderChild(result);
             }
