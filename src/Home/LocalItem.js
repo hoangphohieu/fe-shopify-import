@@ -108,7 +108,7 @@ function LocalItem(props) {
                   <div className="one-pro">
                         <span>Body (HTML)</span>
                         <input type="text"
-                              onChange={(e) => setMockData({ ...MockData, "Body (HTML)": e.target.value })}
+                              onChange={(e) => setMockData({ ...MockData, "Body (HTML)": (e.target.value).split(",").join("&#44;").split('"').join("") })}
                               value={MockData["Body (HTML)"]}
                         />
                   </div>
@@ -231,7 +231,7 @@ function LocalItem(props) {
             <button className="add_variant mt-3" onClick={addVariant}>
                   add Variant
                     </button>
-                    <br/>
+            <br />
             <button onClick={addProduct} className="mt-5 mr-2">
                   Lưu Sản phẩm
                    </button>

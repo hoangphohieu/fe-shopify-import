@@ -14,7 +14,7 @@ function Home(props) {
         mockData: {
             "Handle": "",
             "Title": "",
-            "Body (HTML)": "",
+            "Body (HTML)": '',
             "Vendor": "",
             "Type": "",
             "Tags": "",
@@ -72,8 +72,8 @@ function Home(props) {
                     link: folderChild[0].id
                 }
             });
-            result = result.data.filter(item=>{return item.trashed===false}).map(item => { return { name: item.name, url: item.webContentLink } });
-            
+            result = result.data.filter(item => { return item.trashed === false }).map(item => { return { name: item.name, url: item.webContentLink } });
+
             if (!ignore) {
                 setdataChild([...dataChild, { name: folderChild[0].name, data: result }]);
                 let folderChild2 = folderChild;
@@ -125,14 +125,14 @@ function Home(props) {
                     item["Variant SKU"] = dataChild.name.split("-")[1].trim() + "-" + "WY" + "-" + itemProduct["Option2Value"];
             }
             items.push(item);
-
+            console.log(item);
         }
         console.log(product.listVariant);
         for (let j = 1; j < product.listVariant.length; j++) {
             let mockData = {
                 "Handle": "",
                 "Title": "",
-                "Body (HTML)": "",
+                "Body (HTML)": '',
                 "Vendor": "",
                 "Type": "",
                 "Tags": "",
@@ -179,40 +179,40 @@ function Home(props) {
                 "Cost per item": ""
             }
             try {
-            mockData["Handle"] = dataChild.name.split(" ").join("-");
-            mockData["Variant Image"] = dataChild.data.filter(param => { return param.name.split(".")[0] === product.listVariant[j].NameDrive })[0].url.split("&")[0];
-            let itemProduct = product.listVariant[j];
-            if (itemProduct.Option1Value !== "") {
-                mockData["Option1 Value"] = itemProduct.Option1Value;
-                mockData["Option2 Value"] = itemProduct.Option2Value;
-                mockData["Option3 Value"] = itemProduct.Option3Value;
-                mockData["Variant Compare At Price"] = itemProduct.VariantCompareAtPrice;
-                mockData["Variant Inventory Qty"] = itemProduct.VariantInventoryQty;
-                mockData["Variant Price"] = itemProduct.VariantPrice;
-                mockData["Variant SKU"] = dataChild.name.split("-")[1];
+                mockData["Handle"] = dataChild.name.split(" ").join("-");
+                mockData["Variant Image"] = dataChild.data.filter(param => { return param.name.split(".")[0] === product.listVariant[j].NameDrive })[0].url.split("&")[0];
+                let itemProduct = product.listVariant[j];
+                if (itemProduct.Option1Value !== "") {
+                    mockData["Option1 Value"] = itemProduct.Option1Value;
+                    mockData["Option2 Value"] = itemProduct.Option2Value;
+                    mockData["Option3 Value"] = itemProduct.Option3Value;
+                    mockData["Variant Compare At Price"] = itemProduct.VariantCompareAtPrice;
+                    mockData["Variant Inventory Qty"] = itemProduct.VariantInventoryQty;
+                    mockData["Variant Price"] = itemProduct.VariantPrice;
+                    mockData["Variant SKU"] = dataChild.name.split("-")[1];
 
-                if (product.mockData["Option2 Name"] !== "") {
-                    console.log(itemProduct["Option1Value"]);
-                    console.log(dataChild.name.split("-")[1]);
-                    if (itemProduct["Option1Value"].trim().toUpperCase() === "HOODIE")
-                        mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "LMS" + "-" + itemProduct["Option2Value"];
-                    else if (itemProduct["Option1Value"].trim().toUpperCase() === "T-SHIRT")
-                        mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "TX" + "-" + itemProduct["Option2Value"];
-                    else if (itemProduct["Option1Value"].trim().toUpperCase() === "SWEATER")
-                        mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "WY" + "-" + itemProduct["Option2Value"];
+                    if (product.mockData["Option2 Name"] !== "") {
+                        console.log(itemProduct["Option1Value"]);
+                        console.log(dataChild.name.split("-")[1]);
+                        if (itemProduct["Option1Value"].trim().toUpperCase() === "HOODIE")
+                            mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "LMS" + "-" + itemProduct["Option2Value"];
+                        else if (itemProduct["Option1Value"].trim().toUpperCase() === "T-SHIRT")
+                            mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "TX" + "-" + itemProduct["Option2Value"];
+                        else if (itemProduct["Option1Value"].trim().toUpperCase() === "SWEATER")
+                            mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "WY" + "-" + itemProduct["Option2Value"];
+                    }
+                    // console.log(mockData);
+
+                    items.push(mockData);
                 }
-                console.log(mockData);
-
-                items.push(mockData);
-            }
-            else {
-                mockData["Variant Image"] = "";
-                mockData["Variant Inventory Policy"] = "";
-                mockData["Variant Fulfillment Service"] = "";
-                mockData["Variant Requires Shipping"] = "";
-                mockData["Variant Taxable"] = "";
-                items.push(mockData);
-            }
+                else {
+                    mockData["Variant Image"] = "";
+                    mockData["Variant Inventory Policy"] = "";
+                    mockData["Variant Fulfillment Service"] = "";
+                    mockData["Variant Requires Shipping"] = "";
+                    mockData["Variant Taxable"] = "";
+                    items.push(mockData);
+                }
 
             } catch (error) {
                 // alert("khai bao tendrive khong dung")
@@ -270,7 +270,7 @@ function Home(props) {
 
             if (result.length === 0) alert("kiem tra lai url")
             else {
-                result = result.filter(item => item.mimeType === "application/vnd.google-apps.folder"&& item.trashed===false).map(item => { return { name: item.name, id: item.id } });
+                result = result.filter(item => item.mimeType === "application/vnd.google-apps.folder" && item.trashed === false).map(item => { return { name: item.name, id: item.id } });
                 setdataChild([]);
                 setfolderChild(result);
             }
@@ -295,7 +295,7 @@ function Home(props) {
             mockData: {
                 "Handle": "",
                 "Title": "",
-                "Body (HTML)": "",
+                "Body (HTML)": '',
                 "Vendor": "",
                 "Type": "",
                 "Tags": "",
@@ -349,7 +349,7 @@ function Home(props) {
             mockData: {
                 "Handle": "",
                 "Title": "",
-                "Body (HTML)": "",
+                "Body (HTML)": '',
                 "Vendor": "",
                 "Type": "",
                 "Tags": "",
