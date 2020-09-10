@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import _ from "lodash";
 function LocalItem(props) {
       // console.log(props);
@@ -11,8 +11,9 @@ function LocalItem(props) {
             Option3Name: (props.mockData) ? props.mockData["Option3 Name"] : "",
             list: props.list
       });
+      let product = props.Product;
 
-      if (localStorage.product === undefined) localStorage.product = JSON.stringify([]);
+      // if (localStorage.product === undefined) localStorage.product = JSON.stringify([]);
       let renderLocal = "";
       let changeVariant = (param, key, value) => {
             let list = MockVariant.list;
@@ -35,7 +36,8 @@ function LocalItem(props) {
                   }]
             });
       }
-      let addProduct = () => {
+      let addProduct = (product) => {
+
             let data = { ...MockData };
             // data["Handle"] = _.kebabCase(data["Title"]) + "-";
             data["Option1 Name"] = MockVariant.Option1Name;
@@ -51,7 +53,7 @@ function LocalItem(props) {
                   | item.VariantInventoryQty !== ""
                   | item.VariantSKU !== ""
             ))
-            let product = JSON.parse(localStorage.product);
+
             let proFilter = product.filter(item => item.productName === MockVariant.productName);
             if (proFilter.length === 1) {
                   for (let i = 0; i < product.length; i++) {
@@ -70,12 +72,34 @@ function LocalItem(props) {
                         listVariant: listVariant
                   }]
             }
-            localStorage.product = JSON.stringify(product);
-            window.location.reload(true);
+
+            fetch("http://157.230.244.57:7000/shopifyItem", {
+                  method: "PUT",
+                  headers: {
+                        'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                        "item_post": {
+                              items: product,
+                              id: "shopifyItem",
+                        }
+                  })
+            })
+                  .then(response => response.json())
+                  .then(res => {
+                        window.location.reload(true);
+                  })
+                  .catch(err => {
+                        window.location.reload(true);
+                  })
+
+            // localStorage.product = JSON.stringify(product);
+            // them add product vao do
+            // window.location.reload(true);
 
       }
       let deleteProduct = () => {
-            let product = JSON.parse(localStorage.product).map(item => {
+            let product = props.Product.map(item => {
                   if (item.productName === MockVariant.productName)
                         return null
                   else return item
@@ -83,9 +107,31 @@ function LocalItem(props) {
             console.log(product);
             product = product.filter(item => item !== null);
 
-            localStorage.product = JSON.stringify(product);
-            window.location.reload(true);
+            fetch("http://157.230.244.57:7000/shopifyItem", {
+                  method: "PUT",
+                  headers: {
+                        'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                        "item_post": {
+                              items: product,
+                              id: "shopifyItem",
+                        }
+                  })
+            })
+                  .then(response => response.json())
+                  .then(res => {
+                        window.location.reload(true);
+                  })
+                  .catch(err => {
+                        window.location.reload(true);
+                  })
+
+            // localStorage.product = JSON.stringify(product);
+            // them delete product
+            // window.location.reload(true);
       }
+      console.log(product);
       if (props.mockData !== undefined) renderLocal = <div className="modal-app">
 
             <div className="catdat_tongquat mt-5">
@@ -232,7 +278,7 @@ function LocalItem(props) {
                   add Variant
                     </button>
             <br />
-            <button onClick={addProduct} className="mt-5 mr-2">
+            <button onClick={() => addProduct(product)} className="mt-5 mr-2">
                   Lưu Sản phẩm
                    </button>
             <button onClick={deleteProduct}>

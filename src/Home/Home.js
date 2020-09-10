@@ -241,7 +241,7 @@ function Home(props) {
     }
     useEffect(() => {
         if (folderChild.length === 0 && dataChild.length !== 0) {
-            let product = JSON.parse(localStorage.product).filter(item => item.productName === SelectProduct)[0];
+            let product = props.Product.filter(item => item.productName === SelectProduct)[0];
             let items = []
             for (let i = 0; i < dataChild.length; i++) {
 
@@ -282,11 +282,11 @@ function Home(props) {
 
     }
 
-    if (localStorage.product === undefined) localStorage.product = JSON.stringify([]);
-    let product = JSON.parse(localStorage.product);
+    // if (localStorage.product === undefined) localStorage.product = JSON.stringify([]);
+    let product = props.Product;
     let changeItemProduct = (name) => {
         // const [showProduct, setshowProduct] = useState({ name: null, show: false });
-        let itemSelect = JSON.parse(localStorage.product).filter(item => item.productName === name)[0];
+        let itemSelect = product.filter(item => item.productName === name)[0];
         setshowProduct({ mockData: itemSelect.mockData, show: true, name: name, list: itemSelect.listVariant });
 
     }
@@ -424,7 +424,7 @@ function Home(props) {
                 {(showProduct.show === true) ? <button onClick={closeModalProduct} className="modal-closse">X</button> : ""}
 
 
-                {(showProduct.show === true) ? <LocalItem mockData={showProduct.mockData} name={showProduct.name} list={showProduct.list} /> : ""}
+                {(showProduct.show === true) ? <LocalItem mockData={showProduct.mockData} Product={props.Product} name={showProduct.name} list={showProduct.list} /> : ""}
 
 
             </div>
