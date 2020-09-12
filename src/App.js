@@ -6,13 +6,13 @@ import axios from 'axios';
 
 function App() {
   const [Product, setProduct] = useState([]);
-  console.log(Product);
+ 
   useEffect(() => { // fetch glass
     let ignore = false;
     async function fetchData() {
       const result = await axios("http://157.230.244.57:7000/?id=shopifyItem");
       if (!ignore) {
-        console.log(result);
+      
 
         let items = result.data[0].item_post.items;
 

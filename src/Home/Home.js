@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as constants from "../constants";
 import axios from "axios";
-// import CsvDownload from "react-json-to-csv";
 import csvDownload from 'json-to-csv-export';
 import _ from "lodash";
 import LocalItem from './LocalItem';
@@ -62,6 +61,7 @@ function Home(props) {
         }
         , show: false, list: []
     });
+
     useEffect(() => {
         let ignore = false;
         async function fetchData() {
@@ -72,7 +72,7 @@ function Home(props) {
                     link: folderChild[0].id
                 }
             });
-            result = result.data.filter(item => { return item.trashed === false }).map(item => { return { name: item.name, url: item.webContentLink } });
+            result = result.data.filter(item => { return item.trashed === false }).map(item => { return { name: item.name, url: item.webContentLink } }).filter(item => { return item.name.split(".")[1] === "jpg" });
 
             if (!ignore) {
                 setdataChild([...dataChild, { name: folderChild[0].name, data: result }]);
@@ -86,7 +86,7 @@ function Home(props) {
         if (folderChild.length > 0) fetchData();
         return () => { ignore = true; }
     }, [folderChild]);
-    // console.log(showProduct);
+    
 
     let createChild = (dataChild, product) => {
         console.log(dataChild);
@@ -95,6 +95,7 @@ function Home(props) {
         if (dataChild.name.split("-").length !== 2) { // neu thu muc co 2 dau - thi loi
             alert("ten thu muc chi duoc 1 dau - ");
             window.location.reload(true);
+            return null;
 
         }
 
@@ -105,7 +106,7 @@ function Home(props) {
             item["Title"] = dataChild.name.split("-")[0];
             item["Variant Image"] = dataChild.data.filter(param => { return param.name.split(".")[0] === itemFirst.NameDrive })[0].url.split("&")[0];
             let itemProduct = product.listVariant[0];
-            console.log(itemProduct);
+
             item["Option1 Value"] = itemProduct.Option1Value;
             item["Option2 Value"] = itemProduct.Option2Value;
             item["Option3 Value"] = itemProduct.Option3Value;
@@ -125,9 +126,9 @@ function Home(props) {
                     item["Variant SKU"] = dataChild.name.split("-")[1].trim() + "-" + "WY" + "-" + itemProduct["Option2Value"];
             }
             items.push(item);
-            console.log(item);
+
         }
-        console.log(product.listVariant);
+
         for (let j = 1; j < product.listVariant.length; j++) {
             let mockData = {
                 "Handle": "",
@@ -192,8 +193,6 @@ function Home(props) {
                     mockData["Variant SKU"] = dataChild.name.split("-")[1];
 
                     if (product.mockData["Option2 Name"] !== "") {
-                        console.log(itemProduct["Option1Value"]);
-                        console.log(dataChild.name.split("-")[1]);
                         if (itemProduct["Option1Value"].trim().toUpperCase() === "HOODIE")
                             mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "LMS" + "-" + itemProduct["Option2Value"];
                         else if (itemProduct["Option1Value"].trim().toUpperCase() === "T-SHIRT")
@@ -220,16 +219,15 @@ function Home(props) {
 
 
         }
-        items.forEach(item => {
+        items.forEach(item => { // xóa trường gì đó, phải có
             if (item["Variant Inventory Qty"] === "") delete item["Variant Inventory Qty"]
         });
 
-        let itemsImg = dataChild.data.filter(param => { return !isNaN(param.name.split(".")[0]) });
-        itemsImg = _.sortBy(itemsImg, [function (o) { return Number(o.name.split(".")[0]) }]);
-        console.log(itemsImg);
+        // đoạn này để thêm ảnh ngoài
+        let itemsImg = _.uniq(product.listVariant.map(item => item.NameDrive)).map(item => { return dataChild.data.filter(itemFilter => { return itemFilter.name.split(".")[0] === item })[0] });
         itemsImg.forEach((param, key) => {
             try { // khi khai bao  giong
-                items[key]["Image Position"] = param.name.split(".")[0];
+                items[key]["Image Position"] = key + 1;
                 items[key]["Image Src"] = param.url.split("&")[0];
             } catch (error) {
                 // alert("sai roi ban")
@@ -249,7 +247,9 @@ function Home(props) {
                 items = [...items, ...createChild(dataChild[i], product)]
                 // console.log(items);
             }
-            csvDownload(items);
+            
+console.log(items.filter(item => item === null).length);
+            if (items.filter(item => item === null).length === 0) csvDownload(items);
             setdataChild([]);
         }
     });
@@ -276,13 +276,13 @@ function Home(props) {
             }
         }
         else {
-            alert("please select product")
+            alert("please select product");
         }
 
 
     }
 
-    // if (localStorage.product === undefined) localStorage.product = JSON.stringify([]);
+
     let product = props.Product;
     let changeItemProduct = (name) => {
         // const [showProduct, setshowProduct] = useState({ name: null, show: false });

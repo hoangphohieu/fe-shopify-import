@@ -13,7 +13,7 @@ function LocalItem(props) {
       });
       let product = props.Product;
 
-      // if (localStorage.product === undefined) localStorage.product = JSON.stringify([]);
+      
       let renderLocal = "";
       let changeVariant = (param, key, value) => {
             let list = MockVariant.list;
@@ -93,9 +93,7 @@ function LocalItem(props) {
                         window.location.reload(true);
                   })
 
-            // localStorage.product = JSON.stringify(product);
-            // them add product vao do
-            // window.location.reload(true);
+   
 
       }
       let deleteProduct = () => {
@@ -127,9 +125,6 @@ function LocalItem(props) {
                         window.location.reload(true);
                   })
 
-            // localStorage.product = JSON.stringify(product);
-            // them delete product
-            // window.location.reload(true);
       }
       console.log(product);
       if (props.mockData !== undefined) renderLocal = <div className="modal-app">
