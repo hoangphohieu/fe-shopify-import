@@ -194,12 +194,18 @@ function Home(props) {
         items.forEach(item => { // xóa trường gì đó, phải có
             if (item["Variant Inventory Qty"] === "") delete item["Variant Inventory Qty"]
         });
-        // đoạn này để thêm ảnh ngoài
-        let itemsImg = _.uniq(product.listVariant.map(item => item.NameDrive)).map(item => { return dataChild.data.filter(itemFilter => { return itemFilter.name.split(".")[0] === item })[0] });
+
+        let itemsImg = _.uniq(product.listVariant.map(item => item.NameDrive)).map(item => {
+            return dataChild.data.filter(itemFilter => { return itemFilter.name.split(".")[0] === item })[0]
+        }).filter(item => item !== undefined);
+
+
+
         itemsImg.forEach((param, key) => {
             try { // khi khai bao  giong
                 items[key]["Image Position"] = key + 1;
                 items[key]["Image Src"] = param.url.split("&")[0];
+                // console.log(param);
             } catch (error) {
                 // alert("sai roi ban")
             }
@@ -327,7 +333,7 @@ function Home(props) {
             items.push(item);
         }
 
-        items[0]["Variant SKU"]="KZDP -"+items[0]["Variant SKU"]
+        items[0]["Variant SKU"] = "KZDP -" + items[0]["Variant SKU"]
         return items
     }
     let product = props.Product;
