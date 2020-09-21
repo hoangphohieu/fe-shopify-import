@@ -9,6 +9,7 @@ function Home(props) {
     const [folderChild, setfolderChild] = useState([]);
     const [dataChild, setdataChild] = useState([]);
     const [SelectProduct, setSelectProduct] = useState(null);
+    const [TrangSanPham, setTrangSanPham] = useState(null);
     const [showProduct, setshowProduct] = useState({
         mockData: {
             "Handle": "",
@@ -154,6 +155,15 @@ function Home(props) {
                     mockData["Handle"] = dataChild.name.split(" ").join("-");
                     mockData["Title"] = dataChild.name.split("-")[0];
                     mockData["Gift Card"] = "FALSE";
+                    if (TrangSanPham !== null) {
+                        mockData["Body (HTML)"] = mockData["Body (HTML)"].split("aaaa@gmail.com").join(TrangSanPham);
+                    }
+                    else { // neu thu muc co 2 dau - thi loi
+                        alert("vui long chon trang san pham");
+                        window.location.reload(true);
+                        return null;
+
+                    }
                 }
                 mockData["Handle"] = dataChild.name.split(" ").join("-");
                 mockData["Variant Image"] = dataChild.data.filter(param => { return param.name.split(".")[0] === product.listVariant[j].NameDrive })[0].url.split("&")[0];
@@ -451,6 +461,7 @@ function Home(props) {
             , show: false, name: "", list: []
         })
     }
+    console.log(TrangSanPham);
     return (
         <React.Fragment>
 
@@ -465,7 +476,16 @@ function Home(props) {
                     <div className="col-3" onClick={addProduct} >Add Product</div>
 
                 </div>
+                {/* chon  mail */}
+                <div className="one-pro">
+                    <span>trang sản phẩm</span>
+                    <select id="Variant_Weight_Unit" onChange={(e) => setTrangSanPham(e.target.value)} >
+                        <option value={null} style={{ display: "none" }}>chọn 1 trang</option>
+                        <option value="support@tomatos-store.com">tomatos-store</option>
+                        <option value="support@muchneeshop.com">muchneeshop</option>
 
+                    </select>
+                </div>
 
 
                 <div className="get-link">
