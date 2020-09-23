@@ -20,7 +20,7 @@ function LocalItem(props) {
             list[key][param] = value;
             setMockVariant({ ...MockVariant, list: [...list] });
       }
-      let listOption = ['NameDrive', 'Option1Value', 'Option2Value', 'Option3Value', 'VariantPrice', 'VariantCompareAtPrice', 'VariantInventoryQty', 'VariantSKU']
+      let listOption = ['NameDrive', 'Option1Value', 'Option2Value', 'Option3Value', 'VariantPrice', 'VariantCompareAtPrice', 'LinkImage', 'VariantSKU']
 
       let addVariant = () => {
             setMockVariant({
@@ -31,7 +31,7 @@ function LocalItem(props) {
                         Option3Value: "",
                         VariantPrice: "",
                         VariantCompareAtPrice: "",
-                        VariantInventoryQty: "",
+                        LinkImage: "",
                         VariantSKU: ""
                   }]
             });
@@ -50,7 +50,7 @@ function LocalItem(props) {
                   | item.Option3Value !== ""
                   | item.VariantPrice !== ""
                   | item.VariantCompareAtPrice !== ""
-                  | item.VariantInventoryQty !== ""
+                  | item.LinkImage !== ""
                   | item.VariantSKU !== ""
             ))
 
@@ -174,28 +174,28 @@ function LocalItem(props) {
                               value={MockData.Tags}
                         />
                   </div>
-                  <div className="one-pro">
+                  {/* <div className="one-pro">
                         <span>Variant Grams (cân nặng sản phẩm)</span>
                         <input type="text"
                               onChange={(e) => setMockData({ ...MockData, "Variant Grams": e.target.value })}
                               value={MockData["Variant Grams"]}
                         />
-                  </div>
-                  <div className="one-pro">
+                  </div> */}
+                  {/* <div className="one-pro">
                         <span>Variant Inventory Qty (lượng hàng trong kho)</span>
                         <input type="text"
                               onChange={(e) => setMockData({ ...MockData, "Variant Inventory Qty": e.target.value })}
                               value={MockData["Variant Inventory Qty"]}
                         />
-                  </div>
-                  <div className="one-pro">
+                  </div> */}
+                  {/* <div className="one-pro">
                         <span>Variant Inventory Policy (deny: hết kho thì thôi, continue hết kho vẫn bán)</span>
                         <select id="Variant_Inventory_Policy" onChange={(e) => setMockData({ ...MockData, "Variant Inventory Policy": e.target.value })}>
                               <option value="deny">deny</option>
                               <option value="continue">continue</option>
                         </select>
-                  </div>
-                  <div className="one-pro">
+                  </div> */}
+                  {/* <div className="one-pro">
                         <span>Variant Price (giá thật sự)</span>
                         <input type="text"
                               onChange={(e) => setMockData({ ...MockData, "Variant Price": e.target.value })}
@@ -208,8 +208,8 @@ function LocalItem(props) {
                               onChange={(e) => setMockData({ ...MockData, "Variant Compare At Price": e.target.value })}
                               value={MockData["Variant Compare At Price"]}
                         />
-                  </div>
-                  <div className="one-pro">
+                  </div> */}
+                  {/* <div className="one-pro">
                         <span>Variant Weight Unit (đơn vị cân nặng)</span>
                         <select id="Variant_Weight_Unit" onChange={(e) => setMockData({ ...MockData, "Variant Weight Unit": e.target.value })} >
                               <option value="g">g</option>
@@ -217,7 +217,7 @@ function LocalItem(props) {
                               <option value="lb">lb</option>
                               <option value="oz">oz</option>
                         </select>
-                  </div>
+                  </div> */}
             </div>
 
             <div className="caidat_bienthe">
@@ -248,7 +248,7 @@ function LocalItem(props) {
                                     </th>
                                     <td >giá thật</td>
                                     <td >giá ảo</td>
-                                    <td >kho</td>
+                                    <td >Link Image</td>
                                     <td >sku</td>
                               </tr>
                         </thead>

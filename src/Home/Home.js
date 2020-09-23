@@ -169,21 +169,28 @@ function Home(props) {
                 mockData["Variant Image"] = dataChild.data.filter(param => { return param.name.split(".")[0] === product.listVariant[j].NameDrive })[0].url.split("&")[0];
                 let itemProduct = product.listVariant[j];
                 if (itemProduct.Option1Value !== "") {
+                    console.log(itemProduct);
                     mockData["Option1 Value"] = itemProduct.Option1Value;
                     mockData["Option2 Value"] = itemProduct.Option2Value;
                     mockData["Option3 Value"] = itemProduct.Option3Value;
                     mockData["Variant Compare At Price"] = itemProduct.VariantCompareAtPrice;
-                    mockData["Variant Inventory Qty"] = itemProduct.VariantInventoryQty;
+                    mockData["Variant Inventory Qty"] = itemProduct.LinkImage;
                     mockData["Variant Price"] = itemProduct.VariantPrice;
-                    mockData["Variant SKU"] = dataChild.name.split("-")[1];
-                    if (product.productName === "áo 3d") {
-                        if (itemProduct["Option1Value"].trim().toUpperCase() === "HOODIE")
-                            mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "LMS" + "-" + itemProduct["Option2Value"];
-                        else if (itemProduct["Option1Value"].trim().toUpperCase() === "T-SHIRT")
-                            mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "TX" + "-" + itemProduct["Option2Value"];
-                        else if (itemProduct["Option1Value"].trim().toUpperCase() === "SWEATER")
-                            mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "WY" + "-" + itemProduct["Option2Value"];
+                    mockData["Variant SKU"] = itemProduct["VariantSKU"].trim() +"-"+ dataChild.name.split("-")[1].trim();
+                    
+                    if (itemProduct["LinkImage"] !== "") {
+                        mockData["Variant Image"] = itemProduct["LinkImage"];
+                        mockData["Variant SKU"] = itemProduct["VariantSKU"].trim();
                     }
+                    // if (product.productName === "áo 3d") {
+                    //     if (itemProduct["Option1Value"].trim().toUpperCase() === "HOODIE")
+                    //         mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "LMS" + "-" + itemProduct["Option2Value"];
+                    //     else if (itemProduct["Option1Value"].trim().toUpperCase() === "T-SHIRT")
+                    //         mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "TX" + "-" + itemProduct["Option2Value"];
+                    //     else if (itemProduct["Option1Value"].trim().toUpperCase() === "SWEATER")
+                    //         mockData["Variant SKU"] = dataChild.name.split("-")[1] + "-" + "WY" + "-" + itemProduct["Option2Value"];
+                    // }
+                    
                     items.push(mockData);
                 }
                 else {
@@ -199,7 +206,7 @@ function Home(props) {
             }
         }
 
-        if (product.productName === "khẩu trang 1") items = itemsKhauTrang([...items], product);
+        // if (product.productName === "khẩu trang 1") items = itemsKhauTrang([...items], product);
 
         items.forEach(item => { // xóa trường gì đó, phải có
             if (item["Variant Inventory Qty"] === "") delete item["Variant Inventory Qty"]
@@ -269,83 +276,83 @@ function Home(props) {
 
     }
 
-    let itemsKhauTrang = (items, product) => {
-        let mockData = {
-            "Handle": "",
-            "Title": "",
-            "Body (HTML)": '',
-            "Vendor": "",
-            "Type": "",
-            "Tags": "",
-            "Published": "",
-            "Option1 Name": "",
-            "Option1 Value": "",
-            "Option2 Name": "",
-            "Option2 Value": "",
-            "Option3 Name": "",
-            "Option3 Value": "",
-            "Variant SKU": "",
-            "Variant Grams": "",
-            "Variant Inventory Tracker": "",
-            "Variant Inventory Qty": null,
-            "Variant Inventory Policy": "deny",
-            "Variant Fulfillment Service": "manual",
-            "Variant Price": "",
-            "Variant Compare At Price": "",
-            "Variant Requires Shipping": "TRUE",
-            "Variant Taxable": "TRUE",
-            "Variant Barcode": "",
-            "Image Src": "",
-            "Image Position": "",
-            "Image Alt Text": "",
-            "Gift Card": "",
-            "SEO Title": "",
-            "SEO Description": "",
-            "Google Shopping / Google Product Category": "",
-            "Google Shopping / Gender": "",
-            "Google Shopping / Age Group": "",
-            "Google Shopping / MPN": "",
-            "Google Shopping / AdWords Grouping": "",
-            "Google Shopping / AdWords Labels": "",
-            "Google Shopping / Condition": "",
-            "Google Shopping / Custom Product": "",
-            "Google Shopping / Custom Label 0": "",
-            "Google Shopping / Custom Label 1": "",
-            "Google Shopping / Custom Label 2": "",
-            "Google Shopping / Custom Label 3": "",
-            "Google Shopping / Custom Label 4": "",
-            "Variant Image": "",
-            "Variant Weight Unit": "",
-            "Variant Tax Code": "",
-            "Cost per item": ""
-        }
-        let arrKhauTrang = [
-            ["10pcs Filter", "KZDP - 10 Filter", "https://cdn.shopify.com/s/files/1/2513/0866/products/PM2.5_c97dfba6-b8ee-44c0-8118-4253352dca81.jpg"],
-            ["10", "330MSTKZ- CM200401", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-1567__1211021604_0d322591-4251-442e-b8fa-69f572fd7ab8.jpg"],
-            ["11", "AAPTMK - Orange", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-1568__398361867_689db9a0-4c6e-4ef4-ab9c-0e8544ad4611.jpg"],
-            ["12", "AAPTMK - Blue", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-1569__-1635293110_50f1fbe2-8a03-4ea1-9174-0025f2bd1456.jpg"],
-            ["13", "AAPTMK - White", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-1570__1050369133_4b68df7a-a2b3-45b1-a6e0-df31bb039ee0.jpg"],
-            ["10 pcs filter", "HXTDP- 10 filters", "https://cdn.shopify.com/s/files/1/2513/0866/products/2020-04-1717.53.38_01f7887d-b0bf-41ad-95e9-8a5d715d7a02.jpg"],
-            ["5", "AAMDMK - Red", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-5__1132852788_fde86528-ddcc-4336-8486-ea27d38662d5.jpg"],
-            ["6", "AAMDMK - Blue", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-6__-892179163_d1bd8464-8c53-4ec9-9751-b50970694b46.jpg"]
-        ]
+    // let itemsKhauTrang = (items, product) => {
+    //     let mockData = {
+    //         "Handle": "",
+    //         "Title": "",
+    //         "Body (HTML)": '',
+    //         "Vendor": "",
+    //         "Type": "",
+    //         "Tags": "",
+    //         "Published": "",
+    //         "Option1 Name": "",
+    //         "Option1 Value": "",
+    //         "Option2 Name": "",
+    //         "Option2 Value": "",
+    //         "Option3 Name": "",
+    //         "Option3 Value": "",
+    //         "Variant SKU": "",
+    //         "Variant Grams": "",
+    //         "Variant Inventory Tracker": "",
+    //         "Variant Inventory Qty": null,
+    //         "Variant Inventory Policy": "deny",
+    //         "Variant Fulfillment Service": "manual",
+    //         "Variant Price": "",
+    //         "Variant Compare At Price": "",
+    //         "Variant Requires Shipping": "TRUE",
+    //         "Variant Taxable": "TRUE",
+    //         "Variant Barcode": "",
+    //         "Image Src": "",
+    //         "Image Position": "",
+    //         "Image Alt Text": "",
+    //         "Gift Card": "",
+    //         "SEO Title": "",
+    //         "SEO Description": "",
+    //         "Google Shopping / Google Product Category": "",
+    //         "Google Shopping / Gender": "",
+    //         "Google Shopping / Age Group": "",
+    //         "Google Shopping / MPN": "",
+    //         "Google Shopping / AdWords Grouping": "",
+    //         "Google Shopping / AdWords Labels": "",
+    //         "Google Shopping / Condition": "",
+    //         "Google Shopping / Custom Product": "",
+    //         "Google Shopping / Custom Label 0": "",
+    //         "Google Shopping / Custom Label 1": "",
+    //         "Google Shopping / Custom Label 2": "",
+    //         "Google Shopping / Custom Label 3": "",
+    //         "Google Shopping / Custom Label 4": "",
+    //         "Variant Image": "",
+    //         "Variant Weight Unit": "",
+    //         "Variant Tax Code": "",
+    //         "Cost per item": ""
+    //     }
+    //     let arrKhauTrang = [
+    //         ["10pcs Filter", "KZDP - 10 Filter", "https://cdn.shopify.com/s/files/1/2513/0866/products/PM2.5_c97dfba6-b8ee-44c0-8118-4253352dca81.jpg"],
+    //         ["10", "330MSTKZ- CM200401", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-1567__1211021604_0d322591-4251-442e-b8fa-69f572fd7ab8.jpg"],
+    //         ["11", "AAPTMK - Orange", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-1568__398361867_689db9a0-4c6e-4ef4-ab9c-0e8544ad4611.jpg"],
+    //         ["12", "AAPTMK - Blue", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-1569__-1635293110_50f1fbe2-8a03-4ea1-9174-0025f2bd1456.jpg"],
+    //         ["13", "AAPTMK - White", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-1570__1050369133_4b68df7a-a2b3-45b1-a6e0-df31bb039ee0.jpg"],
+    //         ["10 pcs filter", "HXTDP- 10 filters", "https://cdn.shopify.com/s/files/1/2513/0866/products/2020-04-1717.53.38_01f7887d-b0bf-41ad-95e9-8a5d715d7a02.jpg"],
+    //         ["5", "AAMDMK - Red", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-5__1132852788_fde86528-ddcc-4336-8486-ea27d38662d5.jpg"],
+    //         ["6", "AAMDMK - Blue", "https://cdn.shopify.com/s/files/1/2513/0866/products/v-6__-892179163_d1bd8464-8c53-4ec9-9751-b50970694b46.jpg"]
+    //     ]
 
-        for (let i = 0; i < arrKhauTrang.length; i++) {
-            let item = { ...mockData };
-            item["Handle"] = items[0]["Handle"];
-            item["Option1 Value"] = arrKhauTrang[i][0];
-            item["Variant SKU"] = arrKhauTrang[i][1];
-            item["Variant Image"] = arrKhauTrang[i][2];
-            item["Variant Price"] = "24.99";
-            item["Variant Compare At Price"] = "32.99";
+    //     for (let i = 0; i < arrKhauTrang.length; i++) {
+    //         let item = { ...mockData };
+    //         item["Handle"] = items[0]["Handle"];
+    //         item["Option1 Value"] = arrKhauTrang[i][0];
+    //         item["Variant SKU"] = arrKhauTrang[i][1];
+    //         item["Variant Image"] = arrKhauTrang[i][2];
+    //         item["Variant Price"] = "24.99";
+    //         item["Variant Compare At Price"] = "32.99";
 
 
-            items.push(item);
-        }
+    //         items.push(item);
+    //     }
 
-        items[0]["Variant SKU"] = "KZDP -" + items[0]["Variant SKU"]
-        return items
-    }
+    //     items[0]["Variant SKU"] = "KZDP -" + items[0]["Variant SKU"]
+    //     return items
+    // }
     let product = props.Product;
     let changeItemProduct = (name) => {
 
@@ -481,7 +488,7 @@ function Home(props) {
                     <span>trang sản phẩm</span>
                     <select id="Variant_Weight_Unit" onChange={(e) => setTrangSanPham(e.target.value)} >
                         <option value={null} style={{ display: "none" }}>chọn 1 trang</option>
-                        <option value="support@tomatos-store.com">tomatos-store</option>
+                        <option value="support@mockingjay.com">mockingjay</option>
                         <option value="support@muchneeshop.com">muchneeshop</option>
 
                     </select>
